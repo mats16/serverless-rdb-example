@@ -10,7 +10,7 @@ aws configure sso --profile default
 aws sso login
 ```
 
-### 2. Create new AWS CDK app
+### 2. Deploy CDK app
 
 ```bash
 yarn install
