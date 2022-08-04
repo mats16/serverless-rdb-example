@@ -1,13 +1,6 @@
-import { App, Stack, StackProps } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-
-export class MyStack extends Stack {
-  constructor(scope: Construct, id: string, props: StackProps = {}) {
-    super(scope, id, props);
-
-    // define resources here...
-  }
-}
+import { App } from 'aws-cdk-lib';
+import { DatabaseStack } from './database-stack';
+import { ApiStack } from './serverless-api-stack';
 
 // for development, use account/region from cdk cli
 const devEnv = {
@@ -17,7 +10,9 @@ const devEnv = {
 
 const app = new App();
 
-new MyStack(app, 'serverless-rdb-example-dev', { env: devEnv });
-// new MyStack(app, 'serverless-rdb-example-prod', { env: prodEnv });
+const dbStack = new DatabaseStack(app, 'example-serverless-db-stack', { env: devEnv });
+const apiStack = new ApiStack(app, 'example-serverless-api-stack', { env: devEnv, vpc: dbStack.vpc });
+
+apiStack.addDependency(dbStack);
 
 app.synth();
